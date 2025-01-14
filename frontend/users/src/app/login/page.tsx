@@ -1,15 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
+
+import { useSearchParams } from "next/navigation";
 
 import eyeClosedIcon from "@/icons/eye-closed.png";
 import eyeIcon from "@/icons/eye-open.png";
 import { login } from "./actions";
 
 export default function Login() {
+  const searchParams = useSearchParams();
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
@@ -22,11 +27,18 @@ export default function Login() {
     await login(formdata);
   };
 
+  useEffect(() => {
+    const message = searchParams.get("message");
+    if (message) {
+      setErrorMessage(decodeURIComponent(message));
+    }
+  }, [searchParams]);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <p className="text-blue-500 text-2xl">USER LOGIN</p>
-        <form onSubmit={handleLogin}>
+        <form className="space-y-2" onSubmit={handleLogin}>
           <Input
             label="Email"
             type="email"
@@ -54,8 +66,10 @@ export default function Login() {
               </button>
             }
           />
+          <div className="text-danger text-sm p-2">{errorMessage}</div>
+
           <button type="submit" className="items-center flex w-full p-2">
-            <div className="p-2 border shadow-xl rounded-xl w-full bg-orange-500">
+            <div className="p-2 border font-bold shadow-xl text-blue-700 rounded-xl w-full bg-orange-500 transition-transform transition scale-95 hover:scale-100 hover:border-orange hover:text-orange">
               SUBMIT
             </div>
           </button>
