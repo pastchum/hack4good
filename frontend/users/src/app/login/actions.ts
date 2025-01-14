@@ -38,6 +38,7 @@ export async function signup(formData: FormData) {
         name: formData.get('name') as string,
         user: formData.get('user') as string,
         points: formData.get('points') as string,
+        email_verified: true
       }
     }
   }
@@ -51,4 +52,13 @@ export async function signup(formData: FormData) {
 
   revalidatePath('/dashboard', 'layout')
   redirect('/dashboard')
+}
+
+export async function signOut() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut();
+
+  revalidatePath('/login', 'layout')
+  redirect('/login')
 }
