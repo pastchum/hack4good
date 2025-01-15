@@ -1,3 +1,4 @@
+## Schemas
 1. Users Table
 The main table to store user information.
 
@@ -7,6 +8,7 @@ id (UUID, Primary Key, Default: uuid_generate_v4()): Unique user ID.
 email (String, Unique): User email.
 phone (String, Unique): User's phone number for password reset.
 created_at (Timestamp, Default: now()): Date of account creation.
+
 2. Vouchers Table
 Stores information about available voucher types.
 
@@ -16,6 +18,7 @@ id (UUID, Primary Key, Default: uuid_generate_v4()): Unique voucher ID.
 denomination (Integer): Value of the voucher.
 description (Text): Details about the voucher.
 created_at (Timestamp, Default: now()): Date when the voucher was created.
+
 3. User Vouchers Table
 Tracks the vouchers owned by each user.
 
@@ -26,6 +29,7 @@ user_id (UUID, Foreign Key → users.id): References the user who owns the vouch
 voucher_id (UUID, Foreign Key → vouchers.id): References the voucher type.
 quantity (Integer): Number of vouchers owned.
 created_at (Timestamp, Default: now()): Date of record creation.
+
 4. Items Table
 Represents items that can be redeemed with vouchers.
 
@@ -38,6 +42,7 @@ stock (Integer, Default: 0): Current stock count.
 voucher_cost (Integer): Number of vouchers required for redemption.
 is_available (Boolean, Default: true): Indicates if the item is in stock.
 created_at (Timestamp, Default: now()): Date when the item was added.
+
 5. Voucher Requests Table
 Tracks requests from users to earn vouchers based on positive behavior.
 
@@ -49,6 +54,7 @@ positive_behaviour (Text): Description of the positive behavior.
 requested_vouchers (Integer): Number of vouchers requested.
 status (Enum: pending, approved, rejected, Default: pending): Status of the request.
 created_at (Timestamp, Default: now()): Date of request.
+
 6. Item Requests Table
 Tracks user requests to redeem items using vouchers.
 
@@ -61,7 +67,8 @@ quantity (Integer): Number of items requested.
 status (Enum: pending, approved, rejected, Default: pending): Status of the request.
 is_preorder (Boolean, Default: false): Indicates if it’s a pre-order request.
 created_at (Timestamp, Default: now()): Date of request.
-Relationships
+
+## Relationships
 users → user_vouchers:
 One-to-many: A user can own multiple types of vouchers.
 
