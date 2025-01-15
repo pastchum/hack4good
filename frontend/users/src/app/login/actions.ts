@@ -5,11 +5,27 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
-export async function login(formData: FormData) {
+export async function loginWithNumber(formData: FormData) {
   const supabase = await createClient()
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  const data = {
+    phone: formData.get('phone') as string,
+    password: formData.get('password') as string,
+  }
+
+  const { error } = await supabase.auth.signInWithPassword(data)
+
+  if (error) {
+    redirect(`/login?message=${encodeURIComponent(error.message)}`)
+  }
+
+  revalidatePath('/', 'layout')
+  redirect('/dashboard')
+}
+
+export async function loginWithEmail(formData: FormData) {
+  const supabase = await createClient()
+
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
@@ -25,12 +41,13 @@ export async function login(formData: FormData) {
   redirect('/dashboard')
 }
 
-export async function signup(formData: FormData) {
+export async function signupWithPhone(formData: FormData) {
   const supabase = await createClient()
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
+    phone: formData.get('phone') as string,
     email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
@@ -54,6 +71,7 @@ export async function signup(formData: FormData) {
   redirect('/dashboard')
 }
 
+
 export async function signOut() {
   const supabase = await createClient();
 
@@ -63,8 +81,36 @@ export async function signOut() {
   redirect('/login')
 }
 
-export async function forgotPassword(formData: FormData) {
+export async function resetPasswordWithNumber(formData: FormData) {
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.
+  const data = {
+    phone: formData.get('phone') as string
+  }
+
+  const { error } = await supabase.auth.signInWithOtp(data)
+
+  if (error) {
+    redirect(`/forgot-password?message=${encodeURIComponent(error.message)}`)
+  }
+  
+  revalidatePath('/forgot-password', 'layout')
+  redirect('/forgot-password?message=success')
+}
+
+export async function resetPasswordWithEmail(formData: FormData) {
+  const supabase = await createClient()
+
+  const data = {
+    email: formData.get('email') as string
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(data.email)
+
+  if (error) {
+    redirect(`/forgot-password?message=${encodeURIComponent(error.message)}`)
+  }
+  
+  revalidatePath('/forgot-password', 'layout')
+  redirect('/forgot-password?message=success')
 }

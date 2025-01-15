@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 
 import eyeClosedIcon from "@/icons/eye-closed.png";
 import eyeIcon from "@/icons/eye-open.png";
-import { login } from "./actions";
+import { loginWithNumber, loginWithEmail } from "./actions";
 import Header from "../components/Header";
 
 export default function Login() {
@@ -17,15 +17,25 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [email, setEmail] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [visible, setVisible] = useState<boolean>(false);
+
+  const [useEmail, setUseEmail] = useState(true);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const formdata = new FormData();
-    formdata.append("email", email);
-    formdata.append("password", password);
-    await login(formdata);
+
+    if (useEmail) {
+      formdata.append("email", email);
+      formdata.append("password", password);
+      await loginWithEmail(formdata);
+    } else {
+      formdata.append("phone", number);
+      formdata.append("password", password);
+      await loginWithNumber(formdata);
+    }
   };
 
   useEffect(() => {
@@ -41,11 +51,19 @@ export default function Login() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <p className="text-blue-500 text-2xl">USER LOGIN</p>
         <form className="space-y-2" onSubmit={handleLogin}>
-          <Input
-            label="Email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          {useEmail ? (
+            <Input
+              label="Email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          ) : (
+            <Input
+              label="Number"
+              type="string"
+              onChange={(e) => setNumber(e.target.value)}
+            />
+          )}
           <Input
             label="Password"
             type={visible ? "text" : "password"}
