@@ -45,7 +45,7 @@ export default function SignupPage() {
     formdata.append("user", "resident");
     formdata.append("points", "0");
 
-    signup(formdata);
+    //signup(formdata);
   };
 
   return (

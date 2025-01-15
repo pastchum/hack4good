@@ -76,10 +76,17 @@ export default function Login() {
             </div>
           </button>
         </form>
-        <div>
-          <a className="text-sm" href="/signup">
-            Request for account
-          </a>
+        <div className="flex flex-col gap-4 justify-between">
+          <div>
+            <a className="text-sm" href="/signup">
+              Request for account
+            </a>
+          </div>
+          <div>
+            <a className="text-sm" href="/forgot-password">
+              Forgot password?
+            </a>
+          </div>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
