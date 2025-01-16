@@ -37,6 +37,7 @@ CREATE TABLE items (
     stock INT DEFAULT 0,
     voucher_cost INT NOT NULL,
     is_available BOOLEAN DEFAULT true,
+    product_image TEXT,
     created_at TIMESTAMP DEFAULT now()
 );
 

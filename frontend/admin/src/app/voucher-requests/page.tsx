@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function VoucherRequests() {
-  const [requests, setRequests] = useState([]);
+  interface Request {
+    id: number;
+    userName: string;
+    voucherCount: number;
+    behavior: string;
+  }
+
+  const [requests, setRequests] = useState<Request[]>([]);
 
   useEffect(() => {
     axios.get("/api/voucher-requests").then((res) => setRequests(res.data));

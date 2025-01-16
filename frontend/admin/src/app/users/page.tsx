@@ -1,10 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Key, useEffect, useState } from "react";
 import axios from "axios";
 
+type User = {
+  id: Key | null | undefined;
+  name: string;
+  points: number;
+  voucherBalance: number;
+  behavior: string;
+};
+
 export default function Users() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     axios.get("/api/users").then((res) => setUsers(res.data));
