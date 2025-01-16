@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/server";
 import Header from "../components/Header";
-import Filter from "../components/Filter";
+import Filter, { FilterDetails } from "../components/Filter";
 
 interface Product {
   id: number;
@@ -15,12 +17,32 @@ interface AvailableProductsPageProps {
   products: Product[];
 }
 
-export default async function AvailableProductsPage() {
-  const supabase = await createClient();
+export default function AvailableProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedFilters, setSelectedFilters] = useState<FilterDetails>({
+    selectedKeys: new Set(["Available"]),
+    priceRange: [0, 100],
+    search: "",
+  });
 
-  //const products = await supabase.from("products").select("*");
-  
+  /*useEffect(() => {
+    const fetchProducts = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("products").select("*");
 
+      if (error) {
+        console.error("Error fetching products:", error);
+      } else {
+        setProducts(data);
+      }
+    }; 
+
+    fetchProducts();
+  }, [selectedFilters]);*/
+
+  const handleSelectionChange = (newSelection: FilterDetails) => {
+    setSelectedFilters(newSelection);
+  };
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Header />
