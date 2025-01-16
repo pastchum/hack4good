@@ -67,3 +67,6 @@ frontend/admin/yarn-debug.log*
 frontend/admin/yarn-error.log*
 frontend/admin/.vercel
 frontend/admin/.env*
+
+# frontend
+frontend/.env*
