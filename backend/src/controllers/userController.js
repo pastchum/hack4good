@@ -22,11 +22,11 @@ exports.getVoucherBalance = async (req, res) => {
 
 // Submit a voucher request
 exports.requestVouchers = async (req, res) => {
-  const { userId, positiveBehaviour, requestedVouchers } = req.body;
+  const { userId,voucherId, positiveBehaviour, requestedVouchers } = req.body;
   try {
     const { error } = await supabase
       .from('voucher_requests')
-      .insert([{ user_id: userId, positive_behaviour: positiveBehaviour, requested_vouchers: requestedVouchers }]);
+      .insert([{ user_id: userId, voucher_id: voucherId, positive_behaviour: positiveBehaviour, requested_vouchers: requestedVouchers }]);
 
     if (error) throw error;
 
