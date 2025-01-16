@@ -1,29 +1,3 @@
-// exports.loginUser = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-//     if (error) throw error;
-
-//     res.status(200).json({ success: true, message: 'Login successful', data });
-//   } catch (error) {
-//     res.status(401).json({ success: false, message: 'Login failed', error });
-//   }
-// };
-
-// exports.resetPassword = async (req, res) => {
-//     const { email } = req.body;
-//     try {
-//       const { data, error } = await supabase.auth.resetPasswordForEmail(email);
-  
-//       if (error) throw error;
-  
-//       res.status(200).json({ success: true, message: 'Password reset email sent' });
-//     } catch (error) {
-//       res.status(500).json({ success: false, message: 'Failed to send password reset email', error });
-//     }
-//   };
-
 const supabase = require('../utils/supabase');
 
 // Login with email
@@ -43,8 +17,21 @@ const loginWithEmail = async (req, res) => {
   return res.status(200).json({ user: data.user });
 };
 
+// login with number
+const loginWithNumber = async (req, res) => {
+  const { phone, password } = req.body;
+
+  const { error } = await supabase.auth.signInWithPassword(data)
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.status(200).json({ user: data.user });
+};
+
 // Sign up with phone
-const signupWithPhone = async (req, res) => {
+const signup = async (req, res) => {
   const { email, phone, password, name, user, points } = req.body;
 
   if (!email || !password || !phone || !name || !user || !points) {
@@ -60,7 +47,7 @@ const signupWithPhone = async (req, res) => {
         data: {
           name,
           user,
-          points: parseInt(points, 10),
+          points: parseInt(points),
           email_verified: true,
         },
       },
@@ -91,10 +78,33 @@ const resetPasswordWithEmail = async (req, res) => {
   return res.status(200).json({ message: 'Password reset email sent.' });
 };
 
-// Other methods like loginWithNumber, resetPasswordWithNumber, signOut can follow similar patterns
+// reset password with number
+const resetPasswordWithNumber = async(req, res) => {
+  const { phone } = await supabase.auth.signInWithOtp(phone)
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.status(200).json({ message: "OTP sent" })
+}
+
+// Sign out function
+const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    return res.status(400).json({ error: error.message });
+  }
+
+  return res.status(200).json({ message: 'User successfully logged out' });
+}
 
 module.exports = {
   loginWithEmail,
-  signupWithPhone,
+  loginWithNumber,
+  signup,
   resetPasswordWithEmail,
+  resetPasswordWithNumber,
+  signOut
 };
