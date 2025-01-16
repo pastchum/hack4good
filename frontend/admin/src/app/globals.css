@@ -5,16 +5,12 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #4F46E5; /* Add a primary color */
-  --secondary: #9333EA; /* Add a secondary color */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --primary: #6366F1;
-    --secondary: #A855F7;
   }
 }
 
@@ -22,17 +18,4 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-  @apply antialiased; /* Tailwind's antialiasing */
-}
-
-a {
-  @apply text-primary hover:underline;
-}
-
-header, footer {
-  @apply bg-primary text-white;
-}
-
-button {
-  @apply px-4 py-2 rounded bg-primary text-white hover:bg-secondary;
 }

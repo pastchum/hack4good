@@ -4,7 +4,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 export default function Inventory() {
-  const [inventory, setInventory] = useState([]);
+  interface InventoryItem {
+    id: number;
+    name: string;
+    stock_count: number;
+    voucher_price: number;
+  }
+
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
 
   useEffect(() => {
     axios.get("/api/inventory").then((res) => setInventory(res.data));
@@ -16,6 +23,12 @@ export default function Inventory() {
       prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
     );
   };
+
+  const toggleDisplay = () => {
+    setDisplay((prev) => !prev);
+  };
+
+  const [display, setDisplay] = useState(true);
 
   return (
     <div>
