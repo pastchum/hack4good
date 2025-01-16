@@ -1,9 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const dotenv = require('dotenv');
-const userRoutes = require('./src/routes/userRoutes');
-const adminRoutes = require('./src/routes/adminRoutes');
-const authRoutes = require('./src/routes/authRoutes');
-const { globalErrorHandler } = require('./src/middlewares/errorMiddleware');
+const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const authRoutes = require('./routes/authRoutes');
+const { globalErrorHandler } = require('./middleware/errorMiddleware');
 
 dotenv.config();
 
