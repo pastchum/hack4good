@@ -12,13 +12,16 @@ export interface Product {
 
 export const RenderProduct = ({ product }: { product: Product }) => {
   return (
-    <div className="m-2 p-4 border shadow rounded-xl">
-      <Image
-        src={product.product_image}
-        alt={product.name}
-        width={250}
-        height={100}
-      />
+    <div className="m-2 p-4 border shadow rounded-xl w-64 h-80 flex flex-col justify-between">
+      <div className="flex-grow flex items-center justify-center">
+        <Image
+          src={product.product_image}
+          alt={product.name}
+          width={250}
+          height={100}
+          className="object-contain"
+        />
+      </div>
       <h2 className="font-bold pt-2">{product.name}</h2>
       <p className="text-slate-500 text-sm">{product.price} Points</p>
       <p

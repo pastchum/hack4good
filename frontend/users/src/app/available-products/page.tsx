@@ -51,19 +51,21 @@ export default function AvailableProductsPage() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <Header />
       <div className="h-full">
-        <h1 className="text-4xl font-bold">Available Products</h1>
+        <h1 className="text-4xl font-bold">Products</h1>
         <div className="flex flex-row space-x-4 m-2 h-full">
           {/* sidebar */}
           <Filter onSelectionChange={handleSelectionChange} />
           {/* main content */}
-          <div className="m-2 flex flex-col flex-wrap w-4/5 border shadow rounded-xl p-2 h-full">
-            <ul>
-              {visibleProducts.map((product) => (
-                <a href={`/available-products/${product.id}`} key={product.id}>
-                  <RenderProduct product={product} />
-                </a>
-              ))}
-            </ul>
+          <div className="m-2 border shadow rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full overflow-y-auto">
+            {visibleProducts.map((product) => (
+              <a
+                href={`/available-products/${product.id}`}
+                key={product.id}
+                className="w-full h-48"
+              >
+                <RenderProduct product={product} />
+              </a>
+            ))}
           </div>
         </div>
       </div>
