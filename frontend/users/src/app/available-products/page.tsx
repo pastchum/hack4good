@@ -4,41 +4,45 @@ import React, { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/server";
 import Header from "../components/Header";
 import Filter, { FilterDetails } from "../components/Filter";
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  product_image: string;
-}
+import {
+  Product,
+  RenderProduct,
+  test,
+  test2,
+} from "../components/RenderProduct";
 
 interface AvailableProductsPageProps {
   products: Product[];
 }
 
 export default function AvailableProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([test, test2]);
+  const [visibleProducts, setVisibleProducts] = useState<Product[]>(products);
   const [selectedFilters, setSelectedFilters] = useState<FilterDetails>({
     selectedKeys: new Set(["Available"]),
     priceRange: [0, 100],
     search: "",
   });
 
-  /*useEffect(() => {
-    const fetchProducts = async () => {
-      const supabase = createClient();
-      const { data, error } = await supabase.from("products").select("*");
-
-      if (error) {
-        console.error("Error fetching products:", error);
-      } else {
-        setProducts(data);
-      }
-    }; 
-
-    fetchProducts();
-  }, [selectedFilters]);*/
+  useEffect(() => {
+    setVisibleProducts(
+      products.filter(
+        (product) =>
+          product.name
+            .toLowerCase()
+            .includes(selectedFilters.search.toLowerCase()) &&
+          product.price >= selectedFilters.priceRange[0] &&
+          product.price <= selectedFilters.priceRange[1] &&
+          (selectedFilters.selectedKeys.has("Available") &&
+          !selectedFilters.selectedKeys.has("Out of Stock")
+            ? product.available
+            : !selectedFilters.selectedKeys.has("Available") &&
+              selectedFilters.selectedKeys.has("Out of Stock")
+            ? !product.available
+            : true)
+      )
+    );
+  }, [selectedFilters]);
 
   const handleSelectionChange = (newSelection: FilterDetails) => {
     setSelectedFilters(newSelection);
@@ -52,16 +56,14 @@ export default function AvailableProductsPage() {
           {/* sidebar */}
           <Filter onSelectionChange={handleSelectionChange} />
           {/* main content */}
-          <div className="m-2 flex flex-row flex-wrap w-4/5 border shadow rounded-xl p-2 h-full">
-            {/*<ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            <h2>{product.name}</h2>
-            <p>{product.description}</p>
-            <p>${product.price.toFixed(2)}</p>
-          </li>
-        ))}
-      </ul>*/}
+          <div className="m-2 flex flex-col flex-wrap w-4/5 border shadow rounded-xl p-2 h-full">
+            <ul>
+              {visibleProducts.map((product) => (
+                <a href={`/available-products/${product.id}`} key={product.id}>
+                  <RenderProduct product={product} />
+                </a>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
