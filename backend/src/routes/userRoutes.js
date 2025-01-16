@@ -20,4 +20,7 @@ router.get('/items', getAvailableItems);
 // Request an item or place a pre-order
 router.post('/items/request', requestItem);
 
+// Request transaction history
+router.post('/transactions', getTransactionHistory)
+
 module.exports = router;
