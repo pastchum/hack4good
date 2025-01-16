@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import Filter, { TransactionFilterDetails } from "../components/Filter";
+import TransactionFilter, { TransactionFilterDetails } from "../components/TransactionFilter";
 interface Transaction {
   id: string;
   date: string;
@@ -73,7 +73,7 @@ export default function TransactionHistoryPage() {
         <h1 className="text-4xl font-bold">Transaction History</h1>
         <div className="flex flex-row space-x-4 m-2 h-full">
           {/* Sidebar for filters */}
-          <Filter onSelectionChange={handleSelectionChange} />
+          <TransactionFilter onSelectionChange={handleSelectionChange} />
           {/* Main content */}
           <div className="m-2 border shadow rounded-xl grid grid-cols-1 gap-4 w-full overflow-y-auto">
             {loading ? (
@@ -84,7 +84,7 @@ export default function TransactionHistoryPage() {
               visibleTransactions.map((transaction) => (
                 <div
                   key={transaction.id}
-                  className="p-4 border rounded shadow hover:bg-gray-100"
+                  className="p-4 border rounded shadow"
                 >
                   <p className="font-bold">Transaction ID: {transaction.id}</p>
                   <p>Date: {transaction.date}</p>

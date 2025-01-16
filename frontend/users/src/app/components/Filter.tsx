@@ -18,10 +18,6 @@ export interface FilterDetails {
   search: string;
 }
 
-export interface TransactionFilterDetails {
-  selectedKeys: Set<string>;
-}
-
 interface FilterProps {
   onSelectionChange: (filterSelection: FilterDetails) => void;
 }
