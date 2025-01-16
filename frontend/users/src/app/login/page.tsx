@@ -34,7 +34,6 @@ export default function Login() {
       const user = await loginWithEmail(formdata);
       if (user) {
         console.log("user validated through email");
-        router.push("/dashboard");
       }
     } else {
       formdata.append("phone", number);
@@ -44,9 +43,9 @@ export default function Login() {
       const user = await loginWithNumber(formdata);
       if (user) {
         console.log("user validated through number");
-        router.push("/dashboard");
       }
     }
+    return router.push("/dashboard");
   };
 
   const loginWithEmail = async (formData: FormData) => {
