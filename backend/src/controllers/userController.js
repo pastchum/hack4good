@@ -51,7 +51,29 @@ exports.getAvailableItems = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("items")
-      .select("id, name, description, voucher_cost, stock, product_image");
+      .select(
+        "id, name, description, voucher_cost, stock, product_image, is_available"
+      );
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch items", error });
+  }
+};
+
+exports.getItemDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { data, error } = await supabase
+      .from("items")
+      .select(
+        "id, name, description, voucher_cost, stock, product_image, is_available"
+      )
+      .eq("id", id);
 
     if (error) throw error;
 
