@@ -10,21 +10,16 @@ export default function UserDetails({ userDetails }: UserDetailsProps) {
         WELCOME
         <div className="text-blue-500">{userDetails.name}</div>
       </div>
-      <br />
-      You have
-      <div className="flex flex-row space-x-1 text-lg font-bold">
-        <div className="text-orange-500">{userDetails.points}</div>
-        <div>points</div>
-      </div>
     </div>
   );
 }
 
 type UserDetails = {
   name: string;
-  points: string;
 };
 
 type UserDetailsProps = {
-  userDetails: UserDetails;
+  userDetails: {
+    name: string;
+  };
 };
