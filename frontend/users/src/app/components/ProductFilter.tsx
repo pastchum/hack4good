@@ -59,7 +59,7 @@ export default function ProductFilter({ onSelectionChange }: FilterProps) {
   };
 
   return (
-    <div className="m-2 p-4 border shadow rounded-xl w-1/5 h-full">
+    <div className="m-2 p-4 border shadow rounded-xl w-full md:w-1/5 h-full">
       {/* Filter for Search */}
       <p className="text-xl font-bold">Search</p>
       <Input

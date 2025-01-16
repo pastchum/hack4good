@@ -12,7 +12,7 @@ import {
 } from "../components/RenderProduct";
 
 export default function AvailableProductsPage() {
-  const [products, setProducts] = useState<Product[]>([test, test2]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [visibleProducts, setVisibleProducts] = useState<Product[]>(products);
   const [selectedFilters, setSelectedFilters] = useState<FilterDetails>({
     selectedKeys: new Set(["Available"]),
@@ -28,13 +28,17 @@ export default function AvailableProductsPage() {
         const response = await fetch("http://localhost:3000/api/users/items");
         const data = await response.json();
         console.log(data);
+        if (response.ok && data.success) {
+          setProducts(data.data);
+          setVisibleProducts(data.data);
+        }
       } catch (error) {
         console.error("Error fetching products", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchProducts();
+    fetchProducts().then(() => console.log(products));
   }, []);
 
   useEffect(() => {
@@ -48,10 +52,10 @@ export default function AvailableProductsPage() {
           product.voucher_cost <= selectedFilters.priceRange[1] &&
           (selectedFilters.selectedKeys.has("Available") &&
           !selectedFilters.selectedKeys.has("Out of Stock")
-            ? product.available
+            ? product.is_available
             : !selectedFilters.selectedKeys.has("Available") &&
               selectedFilters.selectedKeys.has("Out of Stock")
-            ? !product.available
+            ? !product.is_available
             : true)
       )
     );
@@ -65,7 +69,7 @@ export default function AvailableProductsPage() {
       <Header />
       <div className="h-full">
         <h1 className="text-4xl font-bold">Products</h1>
-        <div className="flex flex-row space-x-4 m-2 h-full">
+        <div className="flex md:flex-row flex-col-reverse space-x-4 m-2 h-full">
           {/* sidebar */}
           <ProductFilter onSelectionChange={handleSelectionChange} />
           {/* main content */}
