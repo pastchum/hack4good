@@ -3,17 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/server";
 import Header from "../components/Header";
-import Filter, { FilterDetails } from "../components/Filter";
+import ProductFilter, { FilterDetails } from "../components/ProductFilter";
 import {
   Product,
   RenderProduct,
   test,
   test2,
 } from "../components/RenderProduct";
-
-interface AvailableProductsPageProps {
-  products: Product[];
-}
 
 export default function AvailableProductsPage() {
   const [products, setProducts] = useState<Product[]>([test, test2]);
@@ -28,27 +24,38 @@ export default function AvailableProductsPage() {
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
-      setVisibleProducts(
-        products.filter(
-          (product) =>
-            product.name
-              .toLowerCase()
-              .includes(selectedFilters.search.toLowerCase()) &&
-            product.price >= selectedFilters.priceRange[0] &&
-            product.price <= selectedFilters.priceRange[1] &&
-            (selectedFilters.selectedKeys.has("Available") &&
-            !selectedFilters.selectedKeys.has("Out of Stock")
-              ? product.available
-              : !selectedFilters.selectedKeys.has("Available") &&
-                selectedFilters.selectedKeys.has("Out of Stock")
-              ? !product.available
-              : true)
-        )
-      );
-      setLoading(false);
+      try {
+        const response = await fetch("http://localhost:3000/api/users/items");
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error fetching products", error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchProducts();
-  }, [selectedFilters]);
+  }, []);
+
+  useEffect(() => {
+    setVisibleProducts(
+      products.filter(
+        (product) =>
+          product.name
+            .toLowerCase()
+            .includes(selectedFilters.search.toLowerCase()) &&
+          product.voucher_cost >= selectedFilters.priceRange[0] &&
+          product.voucher_cost <= selectedFilters.priceRange[1] &&
+          (selectedFilters.selectedKeys.has("Available") &&
+          !selectedFilters.selectedKeys.has("Out of Stock")
+            ? product.available
+            : !selectedFilters.selectedKeys.has("Available") &&
+              selectedFilters.selectedKeys.has("Out of Stock")
+            ? !product.available
+            : true)
+      )
+    );
+  }, [selectedFilters, products]);
 
   const handleSelectionChange = (newSelection: FilterDetails) => {
     setSelectedFilters(newSelection);
@@ -60,7 +67,7 @@ export default function AvailableProductsPage() {
         <h1 className="text-4xl font-bold">Products</h1>
         <div className="flex flex-row space-x-4 m-2 h-full">
           {/* sidebar */}
-          <Filter onSelectionChange={handleSelectionChange} />
+          <ProductFilter onSelectionChange={handleSelectionChange} />
           {/* main content */}
           <div className="m-2 border shadow rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full overflow-y-auto">
             {loading ? (

@@ -22,7 +22,7 @@ interface FilterProps {
   onSelectionChange: (filterSelection: FilterDetails) => void;
 }
 
-export default function Filter({ onSelectionChange }: FilterProps) {
+export default function ProductFilter({ onSelectionChange }: FilterProps) {
   const [selectedKeys, setSelectedKeys] = useState(new Set(["Available"]));
   const selectedValue = useMemo(() => {
     if (selectedKeys.size === 2) {

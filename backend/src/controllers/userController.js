@@ -1,17 +1,20 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const { createClient } = require('@supabase/supabase-js');
+const { createClient } = require("@supabase/supabase-js");
 
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
 // Get a user's voucher balance
 exports.getVoucherBalance = async (req, res) => {
   const { userId } = req.params;
   try {
     const { data, error } = await supabase
-      .from('user_vouchers')
-      .select('quantity, vouchers(denomination)')
-      .eq('user_id', userId);
+      .from("user_vouchers")
+      .select("quantity, vouchers(denomination)")
+      .eq("user_id", userId);
 
     if (error) throw error;
 
@@ -23,15 +26,22 @@ exports.getVoucherBalance = async (req, res) => {
 
 // Submit a voucher request
 exports.requestVouchers = async (req, res) => {
-  const { userId,voucherId, positiveBehaviour, requestedVouchers } = req.body;
+  const { userId, voucherId, positiveBehaviour, requestedVouchers } = req.body;
   try {
-    const { error } = await supabase
-      .from('voucher_requests')
-      .insert([{ user_id: userId, voucher_id: voucherId, positive_behaviour: positiveBehaviour, requested_vouchers: requestedVouchers }]);
+    const { error } = await supabase.from("voucher_requests").insert([
+      {
+        user_id: userId,
+        voucher_id: voucherId,
+        positive_behaviour: positiveBehaviour,
+        requested_vouchers: requestedVouchers,
+      },
+    ]);
 
     if (error) throw error;
 
-    res.status(201).json({ success: true, message: 'Voucher request submitted' });
+    res
+      .status(201)
+      .json({ success: true, message: "Voucher request submitted" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -40,32 +50,42 @@ exports.requestVouchers = async (req, res) => {
 exports.getAvailableItems = async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('items')
-      .select('name, description, voucher_cost, stock')
-      .eq('is_available', true);
+      .from("items")
+      .select("id, name, description, voucher_cost, stock, product_image");
 
     if (error) throw error;
 
     res.status(200).json({ success: true, data });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to fetch items', error });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch items", error });
   }
 };
 
 exports.requestItem = async (req, res) => {
   const { userId, itemId, quantity, isPreorder } = req.body;
   try {
-    const { error } = await supabase
-      .from('item_requests')
-      .insert([{ user_id: userId, item_id: itemId, quantity, status: 'pending', is_preorder: isPreorder }]);
+    const { error } = await supabase.from("item_requests").insert([
+      {
+        user_id: userId,
+        item_id: itemId,
+        quantity,
+        status: "pending",
+        is_preorder: isPreorder,
+      },
+    ]);
 
     if (error) throw error;
 
-    res.status(201).json({ success: true, message: 'Item request submitted successfully' });
+    res
+      .status(201)
+      .json({ success: true, message: "Item request submitted successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to submit item request', error });
+    res.status(500).json({
+      success: false,
+      message: "Failed to submit item request",
+      error,
+    });
   }
 };
-
-
-

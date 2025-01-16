@@ -5,7 +5,7 @@ export interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
+  voucher_cost: number;
   stock: number;
   available: boolean;
   product_image: string;
@@ -24,7 +24,7 @@ export const RenderProduct = ({ product }: { product: Product }) => {
         />
       </div>
       <h2 className="font-bold pt-2">{product.name}</h2>
-      <p className="text-slate-500 text-sm">{product.price} Points</p>
+      <p className="text-slate-500 text-sm">{product.voucher_cost} Points</p>
       <p
         className={`${
           product.available ? "text-blue-500" : "text-danger"
@@ -40,7 +40,7 @@ export const test = {
   id: 1,
   name: "Chaewon Flag",
   description: "Baddie asffff",
-  price: 10,
+  voucher_cost: 10,
   available: true,
   stock: 10,
   product_image: "/images/chaewon-flag.jpg",
@@ -50,7 +50,7 @@ export const test2 = {
   id: 2,
   name: "Sana Flag",
   description: "Baddie asffff",
-  price: 30,
+  voucher_cost: 30,
   available: false,
   stock: 0,
   product_image: "/images/sana-flag.jpg",
