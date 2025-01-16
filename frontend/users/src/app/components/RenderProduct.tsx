@@ -6,6 +6,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  stock: number;
   available: boolean;
   product_image: string;
 }
@@ -41,6 +42,7 @@ export const test = {
   description: "Baddie asffff",
   price: 10,
   available: true,
+  stock: 10,
   product_image: "/images/chaewon-flag.jpg",
 };
 
@@ -50,5 +52,6 @@ export const test2 = {
   description: "Baddie asffff",
   price: 30,
   available: false,
+  stock: 0,
   product_image: "/images/sana-flag.jpg",
 };
