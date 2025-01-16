@@ -19,17 +19,19 @@ export default function RootLayout({
             <h1 className="text-xl font-bold">Hack4Good Admin</h1>
             <ul className="flex space-x-4">
               <li>
-                <a href="/admin/voucher-requests" className="hover:underline">
+                <a href="/voucher-requests" className="hover:underline">
                   Voucher Requests
                 </a>
               </li>
               <li>
-                <a href="/admin/inventory" className="hover:underline">
+                <a href="/inventory" className="hover:underline">
                   Inventory
                 </a>
               </li>
               <li>
-                <a href="/admin/users" className="hover:underline">Users</a>
+                <a href="/users" className="hover:underline">
+                  Users
+                </a>
               </li>
             </ul>
           </nav>

@@ -1,6 +1,7 @@
 import React from "react";
 import { createClient } from "@/utils/supabase/server";
 import Header from "../components/Header";
+import Filter from "../components/Filter";
 
 interface Product {
   id: number;
@@ -18,6 +19,7 @@ export default async function AvailableProductsPage() {
   const supabase = await createClient();
 
   //const products = await supabase.from("products").select("*");
+  
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -26,9 +28,7 @@ export default async function AvailableProductsPage() {
         <h1 className="text-4xl font-bold">Available Products</h1>
         <div className="flex flex-row space-x-4 m-2 h-full">
           {/* sidebar */}
-          <div className="m-2 p-2 border shadow rounded-xl w-1/5 h-full">
-            Filters
-          </div>
+          <Filter onSelectionChange={handleSelectionChange} />
           {/* main content */}
           <div className="m-2 flex flex-row flex-wrap w-4/5 border shadow rounded-xl p-2 h-full">
             {/*<ul>

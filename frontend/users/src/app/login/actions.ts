@@ -41,7 +41,7 @@ export async function loginWithEmail(formData: FormData) {
   redirect('/dashboard')
 }
 
-export async function signupWithPhone(formData: FormData) {
+export async function signup(formData: FormData) {
   const supabase = await createClient()
 
   // type-casting here for convenience
