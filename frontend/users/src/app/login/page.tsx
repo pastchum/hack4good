@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
-
+import { useRouter } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
 
@@ -9,10 +9,10 @@ import { useSearchParams } from "next/navigation";
 
 import eyeClosedIcon from "@/icons/eye-closed.png";
 import eyeIcon from "@/icons/eye-open.png";
-import { loginWithNumber, loginWithEmail } from "./actions";
 import Header from "../components/Header";
 
 export default function Login() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,13 +30,79 @@ export default function Login() {
     if (useEmail) {
       formdata.append("email", email);
       formdata.append("password", password);
-      await loginWithEmail(formdata);
+
+      // replace with backend req
+      const user = await loginWithEmail(formdata);
+      if (user) { 
+        console.log("user validaetd")
+        router.push('/dashboard'); 
+      }
+      
     } else {
       formdata.append("phone", number);
       formdata.append("password", password);
+
+      //replace with backend req
       await loginWithNumber(formdata);
     }
   };
+
+  const loginWithEmail = async (formData: FormData) => {
+    try {
+      // Convert FormData to JSON
+      const jsonData = Object.fromEntries(formData.entries());
+      const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+      // Send the JSON data to the backend
+      const response = await fetch(`${backendURL}/api/auth/login-with-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Ensure the backend recognizes JSON
+        },
+        body: JSON.stringify(jsonData), // Convert to JSON string
+      });
+
+      const data = await response.json();
+      
+      if (!data) {
+        throw new Error(data.error || 'Something went wrong');
+      }
+  
+      console.log('Login successful:', data.user);
+      return data.user;
+    } catch (error) {
+      console.error('Login error:');
+      throw error;
+    }
+  }
+
+  const loginWithNumber = async (formData: FormData) => {
+    try {
+      // Convert FormData to JSON
+      const jsonData = Object.fromEntries(formData.entries());
+  
+      // Send the JSON data to the backend
+      const response = await fetch('/api/auth/login-with-number', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Ensure the backend recognizes JSON
+        },
+        body: JSON.stringify(jsonData), // Convert to JSON string
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.error || 'Something went wrong');
+      }
+  
+      console.log('Login successful:', data.user);
+      return data.user;
+    } catch (error) {
+      console.error('Login error:');
+      throw error;
+    }
+  }
+
 
   useEffect(() => {
     const message = searchParams.get("message");

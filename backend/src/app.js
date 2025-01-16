@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
@@ -9,6 +10,14 @@ dotenv.config();
 
 const app = express();
 
+// Allow requests from the frontend (adjust the origin as necessary)
+const corsOptions = {
+  origin: 'http://localhost:3001', // Your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  credentials: true, // Allow cookies (if needed)
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

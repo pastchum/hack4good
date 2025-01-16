@@ -3,7 +3,7 @@ const supabase = require('../utils/supabase');
 // Login with email
 const loginWithEmail = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("hi")
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
   }
@@ -13,7 +13,7 @@ const loginWithEmail = async (req, res) => {
   if (error) {
     return res.status(401).json({ error: error.message });
   }
-
+  console.log("request made")
   return res.status(200).json({ user: data.user });
 };
 
