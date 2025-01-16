@@ -31,18 +31,21 @@ export default function Login() {
       formdata.append("email", email);
       formdata.append("password", password);
 
-      // replace with backend req
+      const user = await loginWithEmail(formdata);
+      if (user) {
+        console.log("user validated through email");
+        router.push("/dashboard");
+      }
     } else {
       formdata.append("phone", number);
       formdata.append("password", password);
 
       //replace with backend req
-      await loginWithNumber(formdata);
-    }
-    const user = await loginWithEmail(formdata);
-    if (user) {
-      console.log("user validaetd");
-      router.push("/dashboard");
+      const user = await loginWithNumber(formdata);
+      if (user) {
+        console.log("user validated through number");
+        router.push("/dashboard");
+      }
     }
   };
 
