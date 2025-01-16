@@ -67,6 +67,7 @@ export default function Filter({ onSelectionChange }: FilterProps) {
         value={search}
         onChange={handleSearchChange}
         className="mt-2"
+        aria-label="Search"
       />
       <br />
       {/* Filter for Availability */}
@@ -79,7 +80,7 @@ export default function Filter({ onSelectionChange }: FilterProps) {
         </DropdownTrigger>
         <DropdownMenu
           disallowEmptySelection
-          aria-label="Multiple selection example"
+          aria-label="Filter by availability"
           items={labels}
           closeOnSelect={false}
           selectedKeys={selectedKeys}
@@ -112,6 +113,7 @@ export default function Filter({ onSelectionChange }: FilterProps) {
           step={1}
           onChange={handlePriceChange}
           className="mt-2"
+          aria-label="Price Range"
         />
         <div className="flex justify-between mt-2">
           <span>{priceRange[0]}</span>

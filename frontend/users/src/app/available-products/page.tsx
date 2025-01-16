@@ -23,25 +23,31 @@ export default function AvailableProductsPage() {
     priceRange: [0, 100],
     search: "",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setVisibleProducts(
-      products.filter(
-        (product) =>
-          product.name
-            .toLowerCase()
-            .includes(selectedFilters.search.toLowerCase()) &&
-          product.price >= selectedFilters.priceRange[0] &&
-          product.price <= selectedFilters.priceRange[1] &&
-          (selectedFilters.selectedKeys.has("Available") &&
-          !selectedFilters.selectedKeys.has("Out of Stock")
-            ? product.available
-            : !selectedFilters.selectedKeys.has("Available") &&
-              selectedFilters.selectedKeys.has("Out of Stock")
-            ? !product.available
-            : true)
-      )
-    );
+    async function fetchProducts() {
+      setLoading(true);
+      setVisibleProducts(
+        products.filter(
+          (product) =>
+            product.name
+              .toLowerCase()
+              .includes(selectedFilters.search.toLowerCase()) &&
+            product.price >= selectedFilters.priceRange[0] &&
+            product.price <= selectedFilters.priceRange[1] &&
+            (selectedFilters.selectedKeys.has("Available") &&
+            !selectedFilters.selectedKeys.has("Out of Stock")
+              ? product.available
+              : !selectedFilters.selectedKeys.has("Available") &&
+                selectedFilters.selectedKeys.has("Out of Stock")
+              ? !product.available
+              : true)
+        )
+      );
+      setLoading(false);
+    }
+    fetchProducts();
   }, [selectedFilters]);
 
   const handleSelectionChange = (newSelection: FilterDetails) => {
@@ -57,15 +63,21 @@ export default function AvailableProductsPage() {
           <Filter onSelectionChange={handleSelectionChange} />
           {/* main content */}
           <div className="m-2 border shadow rounded-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full overflow-y-auto">
-            {visibleProducts.map((product) => (
-              <a
-                href={`/available-products/${product.id}`}
-                key={product.id}
-                className="w-full h-48"
-              >
-                <RenderProduct product={product} />
-              </a>
-            ))}
+            {loading ? (
+              <div className="flex justify-center items-center w-full h-48 text-2xl font-bold text-blue-500">
+                <p>Loading...</p>
+              </div>
+            ) : (
+              visibleProducts.map((product) => (
+                <a
+                  href={`/available-products/${product.id}`}
+                  key={product.id}
+                  className="w-full h-48"
+                >
+                  <RenderProduct product={product} />
+                </a>
+              ))
+            )}
           </div>
         </div>
       </div>
