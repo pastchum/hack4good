@@ -9,6 +9,7 @@ CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(15) UNIQUE NOT NULL,
+    data jsonb,
     created_at TIMESTAMP DEFAULT now()
 );
 
