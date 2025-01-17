@@ -6,27 +6,9 @@ import TransactionFilter, {
   TransactionFilterDetails,
 } from "../components/TransactionFilter";
 import { createClient } from "@/utils/supabase/client";
-
-interface Transaction {
-  id: string;
-  date: string;
-  amount: number;
-  status: string; // e.g., "Completed", "Pending", "Failed"
-}
-
-const testTransaction1: Transaction = {
-  id: "123",
-  date: "2025-01-01",
-  amount: 100,
-  status: "Completed",
-};
-
-const testTransaction2: Transaction = {
-  id: "124",
-  date: "2025-01-02",
-  amount: 200,
-  status: "Pending",
-};
+import RenderTransaction, {
+  Transaction,
+} from "../components/RenderTransaction";
 
 export default function TransactionHistoryPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -103,19 +85,19 @@ export default function TransactionHistoryPage() {
           {/* Sidebar for filters */}
           <TransactionFilter onSelectionChange={handleSelectionChange} />
           {/* Main content */}
-          <div className="m-2 border shadow rounded-xl grid grid-cols-1 gap-4 w-full overflow-y-auto">
+          <div className="m-2 border shadow rounded-xl grid grid-cols-1 w-full overflow-y-auto grid:col-1">
             {loading ? (
               <div className="flex justify-center items-center w-full h-48 text-2xl font-bold text-blue-500">
                 <p>Loading...</p>
               </div>
             ) : (
               visibleTransactions.map((transaction) => (
-                <div key={transaction.id} className="p-4 border rounded shadow">
-                  <p className="font-bold">Transaction ID: {transaction.id}</p>
-                  <p>Date: {transaction.date}</p>
-                  <p>Amount: ${transaction.amount}</p>
-                  <p>Status: {transaction.status}</p>
-                </div>
+                <a
+                  href={`transaction-history/${transaction.id}`}
+                  key={transaction.id}
+                >
+                  <RenderTransaction transaction={transaction} />
+                </a>
               ))
             )}
           </div>

@@ -5,6 +5,8 @@ const {
   getItems,
   updateItemInventory,
   addNewUser,
+  createTask,
+  viewAllTasks,
 } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -23,5 +25,9 @@ router.put('/items/:itemId', updateItemInventory);
 
 // update users
 router.post('/add-user', addNewUser);
+
+router.post('/create-task', createTask);
+// look at all tasks
+router.get('/tasks', viewAllTasks);
 
 module.exports = router;
