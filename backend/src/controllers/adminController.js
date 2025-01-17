@@ -117,3 +117,28 @@ exports.getItems = async (req, res) => {
       res.status(500).json({ success: false, message: 'Failed to update inventory', error });
     }
   };
+
+  // Add a new user
+exports.addNewUser = async (req, res) => {
+  const { userId, name, email, phone } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from('users') // Specify the 'users' table
+      .insert([{ id: userId, email, phone }]); // Insert a new user record
+
+    if (error) throw error;
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'User added successfully', 
+      data 
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to add new user', 
+      error 
+    });
+  }
+};

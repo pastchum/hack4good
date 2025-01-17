@@ -8,13 +8,31 @@ export default function AddUser() {
   const [userId, setUserId] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [dob, setDob] = useState("");
+  const [phone, setPhone] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log({ userId, name, email, dob });
-    // send this data to your backend API to add the user
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/add-user`, { // Replace with your backend URL
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, email, phone }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        console.log('User added successfully!');
+      } else {
+        console.log(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Failed to add user:', error);
+      console.log('An error occurred while adding the user.');
+    }
+
   };
 
   return (
@@ -62,14 +80,14 @@ export default function AddUser() {
           />
         </div>
         <div>
-          <label htmlFor="dob" className="block text-lg font-medium text-gray-700">
+          <label htmlFor="phone" className="block text-lg font-medium text-gray-700">
             Date of Birth
           </label>
           <input
-            type="date"
-            id="dob"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
+            type="number"
+            id="phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             required
           />
