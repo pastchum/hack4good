@@ -142,3 +142,53 @@ exports.addNewUser = async (req, res) => {
     });
   }
 };
+// Create a new task
+exports.createTask = async (req, res) => {
+    const { name, voucherId, denomination } = req.body;
+    // {
+    //     "name": "Helped team members",
+    //     "voucherId": "voucher-uuid",
+    //     "denomination": 10
+    //   }
+      
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .insert([{ name, voucher_id: voucherId, denomination }]);
+  
+      if (error) throw error;
+  
+      res.status(201).json({ success: true, message: 'Task created successfully', data });
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Failed to create task', error });
+    }
+  };
+  
+  exports.viewAllTasks = async (req, res) => {
+    try {
+      // Fetch all tasks with voucher details
+      const { data, error } = await supabase
+        .from('tasks')
+        .select(`
+          id,
+          name,
+          voucher_id,
+          vouchers(denomination, description),
+          created_at
+        `);
+  
+      if (error) throw error;
+  
+      res.status(200).json({
+        success: true,
+        data
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Failed to fetch tasks',
+        error
+      });
+    }
+  };
+  
