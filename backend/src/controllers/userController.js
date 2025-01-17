@@ -104,7 +104,7 @@ exports.requestItem = async (req, res) => {
         is_preorder: isPreorder,
       },
     ]);
-
+  
     if (error) throw error;
 
     res
@@ -116,5 +116,22 @@ exports.requestItem = async (req, res) => {
       message: "Failed to submit item request",
       error,
     });
+  }
+};
+
+exports.getTrasactionHistory = async (req, res) => {
+  const { userId } = req.params
+
+  try {
+    const { data, error } = await supabase
+    .from('item_requests')
+    .select('*')
+    .eq('userid', userId);
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import TransactionFilter, { TransactionFilterDetails } from "../components/TransactionFilter";
+import { createClient } from "@/utils/supabase/client";
+
+const supabase = createClient();
+      const { data, error } = await supabase.auth.getUser();
+      const { userId } = data.user?.id;
+
 interface Transaction {
   id: string;
   date: string;
@@ -25,10 +31,7 @@ const testTransaction2: Transaction = {
 };
 
 export default function TransactionHistoryPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    testTransaction1,
-    testTransaction2,
-  ]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [visibleTransactions, setVisibleTransactions] = useState<Transaction[]>(
     transactions
   );
@@ -41,6 +44,7 @@ export default function TransactionHistoryPage() {
     async function fetchTransactions() {
       setLoading(true);
       // Filter transactions based on selected filters
+      fetchTransactionHistory(userId)
       setVisibleTransactions(
         transactions.filter((transaction) =>
           transactionMatchesFilters(transaction, selectedFilters)
@@ -50,6 +54,29 @@ export default function TransactionHistoryPage() {
     }
     fetchTransactions();
   }, [selectedFilters]);
+
+  const fetchTransactionHistory = async (userId: string) => {
+    try {
+      const response = await fetch('http://localhost:3000/transactions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }), // Sending the userId in the body
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log('Transaction History:', data);
+      return data; // Return the data for further use
+    } catch (error) {
+      console.error('Error fetching transaction history:', error.message);
+      throw error;
+    }
+  };
 
   const transactionMatchesFilters = (
     transaction: Transaction,
