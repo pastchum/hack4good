@@ -1,13 +1,14 @@
 const express = require("express");
 const {
   getVoucherBalance,
-  requestVouchers,
+  requestVoucher,
   getAvailableItems,
   requestItem,
   getItemDetails,
   getTrasactionHistory,
   getTransactionDetails,
   cancelTransaction,
+  completeTask,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -16,7 +17,7 @@ const router = express.Router();
 router.get("/:userId/vouchers", getVoucherBalance);
 
 // Request vouchers based on positive behaviour
-router.post("/vouchers/request", requestVouchers);
+router.post("/vouchers/request", requestVoucher);
 
 // Get available items for redemption
 router.get("/items", getAvailableItems);
@@ -35,5 +36,6 @@ router.get("/transactions/get/:id", getTransactionDetails);
 
 // Cancel Transaction
 router.get("/transactions/cancel/:id", cancelTransaction);
+router.post("/tasks/complete", completeTask);
 
 module.exports = router;
