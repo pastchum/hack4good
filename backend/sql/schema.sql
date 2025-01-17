@@ -2,7 +2,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create Enum Type for Request Status
-CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected');
+CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected', 'completed', 'cancelled');
 
 -- Users Table
 CREATE TABLE users (

@@ -85,7 +85,7 @@ export default function TransactionHistoryPage() {
           {/* Sidebar for filters */}
           <TransactionFilter onSelectionChange={handleSelectionChange} />
           {/* Main content */}
-          <div className="m-2 border shadow rounded-xl grid grid-cols-1 w-full overflow-y-auto">
+          <div className="m-2 border shadow rounded-xl grid grid-cols-1 w-full overflow-y-auto grid:col-1">
             {loading ? (
               <div className="flex justify-center items-center w-full h-48 text-2xl font-bold text-blue-500">
                 <p>Loading...</p>

@@ -37,7 +37,9 @@ export default function RenderTransaction({ transaction }: TransactionProps) {
             className={`${
               transaction?.status == "pending"
                 ? "text-orange-500"
-                : "text-blue-500"
+                : transaction?.status == "completed"
+                ? "text-blue-500"
+                : "text-danger-500"
             }`}
           >
             {transaction?.status}
