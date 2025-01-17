@@ -1,9 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function ErrorPage() {
+function ErrorForm() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -27,5 +27,19 @@ export default function ErrorPage() {
         Back to login page
       </a>
     </div>
+  );
+}
+
+export default function ErrorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-2xl font-bold text-blue-500">Loading...</div>
+        </div>
+      }
+    >
+      <ErrorForm />
+    </Suspense>
   );
 }

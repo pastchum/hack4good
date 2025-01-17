@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
@@ -13,6 +13,20 @@ import { loginWithEmail } from "./actions";
 import Header from "../components/Header";
 
 export default function Login() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-2xl font-bold text-blue-500">Loading...</div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+export function LoginForm() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -112,21 +126,21 @@ export default function Login() {
   );
 }
 async function loginWithNumber(formdata: FormData) {
-    try {
-        const response = await fetch("/api/login/phone", {
-            method: "POST",
-            body: formdata,
-        });
+  try {
+    const response = await fetch("/api/login/phone", {
+      method: "POST",
+      body: formdata,
+    });
 
-        if (!response.ok) {
-            throw new Error("Login failed");
-        }
-
-        const data = await response.json();
-        // Handle successful login, e.g., redirect to dashboard or set user context
-        console.log("Login successful", data);
-    } catch (error) {
-        console.error("Error logging in with phone number:", error);
-        // Handle error, e.g., set error message state
+    if (!response.ok) {
+      throw new Error("Login failed");
     }
+
+    const data = await response.json();
+    // Handle successful login, e.g., redirect to dashboard or set user context
+    console.log("Login successful", data);
+  } catch (error) {
+    console.error("Error logging in with phone number:", error);
+    // Handle error, e.g., set error message state
+  }
 }

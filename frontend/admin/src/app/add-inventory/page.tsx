@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { createClient } from '@/utils/supabase/server'
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/server";
 
 const UpdateInventoryPage = () => {
   const [items, setItems] = useState([]); // Store items from Supabase
-  const [selectedItemId, setSelectedItemId] = useState(''); // Selected item's ID
+  const [selectedItemId, setSelectedItemId] = useState(""); // Selected item's ID
   const [stock, setStock] = useState(0); // Stock count to update
   const [voucherCost, setVoucherCost] = useState(0); // Voucher cost to update
 
   useEffect(() => {
     // Fetch items on component load
     const fetchItems = async () => {
-      const supabase = await createClient()
-      const { data: items, error } = await supabase.from('items').select('*');
+      const supabase = await createClient();
+      const { data: items, error } = await supabase.from("items").select("*");
 
       if (error) {
-        console.error('Error fetching items:', error);
+        console.error("Error fetching items:", error);
       } else {
         setItems(items);
       }
@@ -27,7 +29,7 @@ const UpdateInventoryPage = () => {
     e.preventDefault();
 
     if (!selectedItemId || stock < 0 || voucherCost < 0) {
-      alert('Please select an item and provide valid inputs.');
+      alert("Please select an item and provide valid inputs.");
       return;
     }
 
@@ -35,9 +37,9 @@ const UpdateInventoryPage = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/items/${selectedItemId}`,
         {
-          method: 'PUT',
+          method: "PUT",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ stock, voucherCost }),
         }
@@ -45,16 +47,16 @@ const UpdateInventoryPage = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('Server error:', errorText);
+        console.error("Server error:", errorText);
         alert(`Failed to update inventory: ${response.statusText}`);
         return;
       }
 
       const result = await response.json();
-      alert('Inventory updated successfully!');
+      alert("Inventory updated successfully!");
     } catch (error) {
-      console.error('Failed to update inventory:', error);
-      alert('An error occurred while updating the inventory.');
+      console.error("Failed to update inventory:", error);
+      alert("An error occurred while updating the inventory.");
     }
   };
 

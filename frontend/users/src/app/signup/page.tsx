@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
@@ -10,12 +10,14 @@ import eyeIcon from "@/icons/eye-open.png";
 import { signup } from "../login/actions";
 import Header from "../components/Header";
 
-export default function SignupPage() {
+function SignupForm() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+
   const [password, setPassword] = useState<string>("");
   const [passwordCheck, setPasswordCheck] = useState<string>("");
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
@@ -36,16 +38,51 @@ export default function SignupPage() {
     }
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formdata = new FormData();
     formdata.append("email", email);
+    formdata.append("phone", phone);
     formdata.append("password", password);
     formdata.append("name", name);
     formdata.append("user", "resident");
     formdata.append("points", "0");
 
-    //signup(formdata);
+    signup(formdata);
+    const data = {
+      phone: phone,
+      email: email,
+      password: password,
+      options: {
+        userData: {
+          name: name,
+          user: "resident",
+          points: 0,
+          email_verified: true,
+        },
+      },
+    };
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/add-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to sign up");
+      }
+
+      const result = await response.json();
+      console.log("Signup successful:", result);
+    } catch (error) {
+      console.error("error signing up: ", error);
+    }
   };
 
   return (
@@ -64,6 +101,11 @@ export default function SignupPage() {
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <Input
             label="Password"
@@ -139,5 +181,13 @@ export default function SignupPage() {
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupForm />
+    </Suspense>
   );
 }

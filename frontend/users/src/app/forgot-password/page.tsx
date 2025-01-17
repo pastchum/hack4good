@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { Input } from "@nextui-org/input";
 
@@ -12,7 +12,7 @@ import {
   resetPasswordWithNumber,
 } from "../login/actions";
 
-export default function ForgotPassword() {
+function ForgotPasswordForm() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
@@ -113,5 +113,19 @@ export default function ForgotPassword() {
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
     </div>
+  );
+}
+
+export default function ForgotPassword() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-2xl font-bold text-blue-500">Loading...</div>
+        </div>
+      }
+    >
+      <ForgotPasswordForm />
+    </Suspense>
   );
 }

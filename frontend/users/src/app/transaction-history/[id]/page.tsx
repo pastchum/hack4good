@@ -41,7 +41,7 @@ export default function TransactionDetailsPage({
       const { id } = await params;
 
       const response = await fetch(
-        `http://localhost:3000/api/users/transactions/get/${id}`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/transactions/get/${id}`
       );
       const data = await response.json();
       if (data.success) {
@@ -49,7 +49,7 @@ export default function TransactionDetailsPage({
         setTransaction(data.data[0]);
 
         const productResponse = await fetch(
-          `http://localhost:3000/api/users/items/${transaction.item_id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/items/${transaction.item_id}`
         );
 
         const productData = await productResponse.json();
@@ -71,7 +71,7 @@ export default function TransactionDetailsPage({
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/transactions/cancel/${transaction.id}`
+        `${process.env.API_BASE_URL}/api/users/transactions/cancel/${transaction.id}`
       );
 
       const result = await response.json();
