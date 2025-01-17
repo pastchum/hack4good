@@ -87,12 +87,19 @@ exports.getItemDetails = async (req, res) => {
 
 exports.requestItem = async (req, res) => {
   const { userId, itemId, quantity, isPreorder } = req.body;
+  if (!userId || !itemId || quantity == null || isPreorder == null) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields (userId, itemId, quantity, isPreorder) are required",
+      data: req.body,
+    });
+  }
   try {
     const { error } = await supabase.from("item_requests").insert([
       {
         user_id: userId,
         item_id: itemId,
-        quantity,
+        quantity: quantity,
         status: "pending",
         is_preorder: isPreorder,
       },
