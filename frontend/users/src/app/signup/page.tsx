@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
@@ -10,7 +10,7 @@ import eyeIcon from "@/icons/eye-open.png";
 import { signup } from "../login/actions";
 import Header from "../components/Header";
 
-export default function SignupPage() {
+function SignupForm() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -181,5 +181,13 @@ export default function SignupPage() {
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupForm />
+    </Suspense>
   );
 }
