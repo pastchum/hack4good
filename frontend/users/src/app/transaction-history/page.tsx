@@ -1,8 +1,12 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import TransactionFilter, { TransactionFilterDetails } from "../components/TransactionFilter";
+import TransactionFilter, {
+  TransactionFilterDetails,
+} from "../components/TransactionFilter";
+import { createClient } from "@/utils/supabase/client";
+
 interface Transaction {
   id: string;
   date: string;
@@ -25,30 +29,54 @@ const testTransaction2: Transaction = {
 };
 
 export default function TransactionHistoryPage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    testTransaction1,
-    testTransaction2,
-  ]);
-  const [visibleTransactions, setVisibleTransactions] = useState<Transaction[]>(
-    transactions
-  );
-  const [selectedFilters, setSelectedFilters] = useState<TransactionFilterDetails>({
-    selectedKeys: new Set(["Completed", "Pending"]),
-  });
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [visibleTransactions, setVisibleTransactions] =
+    useState<Transaction[]>(transactions);
+  const [selectedFilters, setSelectedFilters] =
+    useState<TransactionFilterDetails>({
+      selectedKeys: new Set(["Completed", "Pending"]),
+    });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchTransactions() {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.getUser();
+      const { id } = data.user!;
       setLoading(true);
       // Filter transactions based on selected filters
-      setVisibleTransactions(
-        transactions.filter((transaction) =>
-          transactionMatchesFilters(transaction, selectedFilters)
-        )
-      );
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/users/transactions/${id}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Transaction History:", data);
+        if (response.ok && data.success) {
+          setTransactions(data.data);
+          setVisibleTransactions(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching transaction history:", error);
+        throw error;
+      }
+
       setLoading(false);
     }
     fetchTransactions();
+    console.log(visibleTransactions);
+  }, []);
+
+  useEffect(() => {
+    setVisibleTransactions(
+      transactions.filter((transaction) =>
+        transactionMatchesFilters(transaction, selectedFilters)
+      )
+    );
   }, [selectedFilters]);
 
   const transactionMatchesFilters = (
@@ -59,7 +87,7 @@ export default function TransactionHistoryPage() {
       filters.selectedKeys.size === 0 ||
       filters.selectedKeys.has(transaction.status);
 
-    return matchesStatus;// && matchesDate;
+    return matchesStatus; // && matchesDate;
   };
 
   const handleSelectionChange = (newSelection: TransactionFilterDetails) => {
@@ -82,13 +110,10 @@ export default function TransactionHistoryPage() {
               </div>
             ) : (
               visibleTransactions.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className="p-4 border rounded shadow"
-                >
+                <div key={transaction.id} className="p-4 border rounded shadow">
                   <p className="font-bold">Transaction ID: {transaction.id}</p>
                   <p>Date: {transaction.date}</p>
-                  <p>Amount: ${transaction.amount.toFixed(2)}</p>
+                  <p>Amount: ${transaction.amount}</p>
                   <p>Status: {transaction.status}</p>
                 </div>
               ))
@@ -99,4 +124,3 @@ export default function TransactionHistoryPage() {
     </div>
   );
 }
-

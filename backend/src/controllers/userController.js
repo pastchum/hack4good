@@ -118,3 +118,20 @@ exports.requestItem = async (req, res) => {
     });
   }
 };
+
+exports.getTrasactionHistory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from("item_requests")
+      .select("*")
+      .eq("user_id", id);
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
