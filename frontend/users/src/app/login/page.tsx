@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 
 import { Input } from "@nextui-org/input";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import eyeIcon from "@/icons/eye-open.png";
 import { loginWithNumber, loginWithEmail } from "./actions";
 import Header from "../components/Header";
 
-export default function Login() {
+function LoginComponent() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -109,5 +109,13 @@ export default function Login() {
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center"></footer>
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginComponent />
+    </Suspense>
   );
 }
