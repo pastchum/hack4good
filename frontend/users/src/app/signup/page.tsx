@@ -64,7 +64,7 @@ function SignupForm() {
     };
     try {
       const response = await fetch(
-        `${process.env.API_BASE_URL}/api/admin/add-user`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/add-user`,
         {
           method: "POST",
           headers: {

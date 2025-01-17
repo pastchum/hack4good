@@ -38,7 +38,7 @@ export default function VoucherPage() {
       // Filter vouchers based on selected filters
       try {
         const response = await fetch(
-          `${process.env.API_BASE_URL}/api/users/${id}/vouchers`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/${id}/vouchers`
         );
 
         if (!response.ok) {

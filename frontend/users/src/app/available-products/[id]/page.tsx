@@ -32,7 +32,7 @@ export default function ProductPage({
         const { id } = await params;
 
         const response = await fetch(
-          `http://localhost:3000/api/users/items/${id}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/items/${id}`
         );
         const data = await response.json();
         if (data.success) {

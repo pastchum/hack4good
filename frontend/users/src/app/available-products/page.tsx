@@ -26,7 +26,7 @@ export default function AvailableProductsPage() {
       setLoading(true);
       try {
         const response = await fetch(
-          `${process.env.API_BASE_URL}/api/users/items`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/items`
         );
         const data = await response.json();
         console.log(data);
