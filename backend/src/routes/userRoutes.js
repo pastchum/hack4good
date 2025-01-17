@@ -5,6 +5,7 @@ const {
   getAvailableItems,
   requestItem,
   getItemDetails,
+  getTrasactionHistory,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -25,6 +26,6 @@ router.get(`/items/:id`, getItemDetails);
 router.post("/items/request", requestItem);
 
 // Request transaction history
-router.post('/transactions', getTransactionHistory)
+router.get("/transactions/:id", getTrasactionHistory);
 
 module.exports = router;

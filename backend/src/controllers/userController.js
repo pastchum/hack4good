@@ -104,7 +104,7 @@ exports.requestItem = async (req, res) => {
         is_preorder: isPreorder,
       },
     ]);
-  
+
     if (error) throw error;
 
     res
@@ -120,13 +120,13 @@ exports.requestItem = async (req, res) => {
 };
 
 exports.getTrasactionHistory = async (req, res) => {
-  const { userId } = req.params
+  const { id } = req.params;
 
   try {
     const { data, error } = await supabase
-    .from('item_requests')
-    .select('*')
-    .eq('userid', userId);
+      .from("item_requests")
+      .select("*")
+      .eq("user_id", id);
 
     if (error) throw error;
 
