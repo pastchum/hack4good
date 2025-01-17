@@ -120,12 +120,12 @@ exports.getItems = async (req, res) => {
 
   // Add a new user
 exports.addNewUser = async (req, res) => {
-  const { userId, name, email, phone } = req.body;
+  const {name, email, phone } = req.body;
 
   try {
     const { data, error } = await supabase
       .from('users') // Specify the 'users' table
-      .insert([{ id: userId, email, phone }]); // Insert a new user record
+      .insert([{ email, phone, name }]); // Insert a new user record
 
     if (error) throw error;
 
