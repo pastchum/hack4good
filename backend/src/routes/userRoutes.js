@@ -9,12 +9,16 @@ const {
   getTransactionDetails,
   cancelTransaction,
   completeTask,
+  getVoucherDetails,
 } = require("../controllers/userController");
 
 const router = express.Router();
 
 // Get voucher balance
 router.get("/:userId/vouchers", getVoucherBalance);
+
+// Get voucher details
+router.get("/vouchers/:id", getVoucherDetails);
 
 // Request vouchers based on positive behaviour
 router.post("/vouchers/request", requestVoucher);
