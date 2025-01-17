@@ -16,6 +16,8 @@ export default function SignupPage() {
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+
   const [password, setPassword] = useState<string>("");
   const [passwordCheck, setPasswordCheck] = useState<string>("");
   const [passwordMatch, setPasswordMatch] = useState<boolean>(true);
@@ -36,16 +38,51 @@ export default function SignupPage() {
     }
   }, [searchParams]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const formdata = new FormData();
     formdata.append("email", email);
+    formdata.append("phone", phone);
     formdata.append("password", password);
     formdata.append("name", name);
     formdata.append("user", "resident");
     formdata.append("points", "0");
 
-    //signup(formdata);
+    signup(formdata);
+    const data = {
+      phone: phone,
+      email: email,
+      password: password,
+      options: {
+        userData: {
+          name: name,
+          user: "resident",
+          points: 0,
+          email_verified: true,
+        },
+      },
+    };
+    try {
+      const response = await fetch(
+        `${process.env.API_BASE_URL}/api/admin/add-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to sign up");
+      }
+
+      const result = await response.json();
+      console.log("Signup successful:", result);
+    } catch (error) {
+      console.error("error signing up: ", error);
+    }
   };
 
   return (
@@ -64,6 +101,11 @@ export default function SignupPage() {
             label="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Phone Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
           <Input
             label="Password"

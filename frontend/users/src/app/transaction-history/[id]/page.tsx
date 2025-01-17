@@ -71,7 +71,7 @@ export default function TransactionDetailsPage({
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/users/transactions/cancel/${transaction.id}`
+        `${process.env.API_BASE_URL}/api/users/transactions/cancel/${transaction.id}`
       );
 
       const result = await response.json();

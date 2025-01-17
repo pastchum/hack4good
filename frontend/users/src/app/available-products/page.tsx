@@ -25,7 +25,9 @@ export default function AvailableProductsPage() {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:3000/api/users/items");
+        const response = await fetch(
+          `${process.env.API_BASE_URL}/api/users/items`
+        );
         const data = await response.json();
         console.log(data);
         if (response.ok && data.success) {

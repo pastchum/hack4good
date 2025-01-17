@@ -29,7 +29,7 @@ export default function TransactionHistoryPage() {
       // Filter transactions based on selected filters
       try {
         const response = await fetch(
-          `http://localhost:3000/api/users/transactions/${id}`
+          `${process.env.API_BASE_URL}/api/users/transactions/${id}`
         );
 
         if (!response.ok) {
