@@ -4,6 +4,7 @@ const {
   updateVoucherRequest,
   getItems,
   updateItemInventory,
+  addNewUser,
 } = require('../controllers/adminController');
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.get('/items', getItems);
 
 // Update inventory stock or voucher cost
 router.put('/items/:itemId', updateItemInventory);
+
+// update users
+router.post('/add-user', addNewUser);
 
 module.exports = router;
