@@ -14,7 +14,7 @@ export default function AddUser() {
     e.preventDefault();
     // Handle form submission logic here
     console.log({ userId, name, email, dob });
-    // You can send this data to your backend API to add the user
+    // send this data to your backend API to add the user
   };
 
   return (

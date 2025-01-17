@@ -1,0 +1,81 @@
+"use client";
+
+import { useState } from "react";
+import Header from "../../components/Header";
+
+type VoucherTask = {
+  id: string;
+  requesterName: string;
+  voucherId: string;
+  itemValue: number;
+  voucherValue: number;
+};
+
+const initialVoucherTasks: VoucherTask[] = [
+  {
+    id: "1",
+    requesterName: "John Doe",
+    voucherId: "V123",
+    itemValue: 100,
+    voucherValue: 90,
+  },
+  {
+    id: "2",
+    requesterName: "Jane Smith",
+    voucherId: "V124",
+    itemValue: 200,
+    voucherValue: 180,
+  },
+  // Add more hardcoded tasks as needed
+];
+
+export default function ApproveVoucherTasks() {
+  const [voucherTasks, setVoucherTasks] = useState<VoucherTask[]>(initialVoucherTasks);
+
+  const handleApprove = (id: string) => {
+    // Handle approve logic here
+    console.log(`Approved voucher task with id: ${id}`);
+    setVoucherTasks(voucherTasks.filter((task) => task.id !== id));
+  };
+
+  const handleReject = (id: string) => {
+    // Handle reject logic here
+    console.log(`Rejected voucher task with id: ${id}`);
+    setVoucherTasks(voucherTasks.filter((task) => task.id !== id));
+  };
+
+  return (
+    <div className="min-h-screen p-8 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <Header />
+      <h1 className="text-4xl font-bold mb-8">Approve Voucher Tasks</h1>
+      {voucherTasks.length === 0 ? (
+        <p className="text-xl">No voucher tasks to display</p>
+      ) : (
+        <ul className="space-y-4">
+          {voucherTasks.map((task) => (
+            <li key={task.id} className="p-4 border rounded-md">
+              <p><strong>Requester Name:</strong> {task.requesterName}</p>
+              <p><strong>Voucher ID:</strong> {task.voucherId}</p>
+              <p><strong>Item Value:</strong> ${task.itemValue}</p>
+              <p><strong>Voucher Value:</strong> ${task.voucherValue}</p>
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={() => handleApprove(task.id)}
+                  className="py-2 px-4 bg-green-500 text-white font-bold rounded-md shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => handleReject(task.id)}
+                  className="py-2 px-4 bg-red-500 text-white font-bold rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  Reject
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
