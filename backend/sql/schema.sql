@@ -2,13 +2,14 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create Enum Type for Request Status
-CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected');
+CREATE TYPE request_status AS ENUM ('pending', 'approved', 'rejected', 'completed', 'cancelled');
 
 -- Users Table
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(15) UNIQUE NOT NULL,
+    data jsonb,
     created_at TIMESTAMP DEFAULT now()
 );
 
@@ -57,6 +58,7 @@ CREATE TABLE item_requests (
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     item_id UUID REFERENCES items(id) ON DELETE CASCADE,
     quantity INT NOT NULL,
+    cost INT NOT NULL,
     status request_status DEFAULT 'pending',
     is_preorder BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT now()

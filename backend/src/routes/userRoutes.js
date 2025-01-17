@@ -6,6 +6,8 @@ const {
   requestItem,
   getItemDetails,
   getTrasactionHistory,
+  getTransactionDetails,
+  cancelTransaction,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -27,5 +29,11 @@ router.post("/items/request", requestItem);
 
 // Request transaction history
 router.get("/transactions/:id", getTrasactionHistory);
+
+// Request transaction details
+router.get("/transactions/get/:id", getTransactionDetails);
+
+// Cancel Transaction
+router.get("/transactions/cancel/:id", cancelTransaction);
 
 module.exports = router;

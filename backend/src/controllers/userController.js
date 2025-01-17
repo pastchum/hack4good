@@ -86,7 +86,7 @@ exports.getItemDetails = async (req, res) => {
 };
 
 exports.requestItem = async (req, res) => {
-  const { userId, itemId, quantity, isPreorder } = req.body;
+  const { userId, itemId, quantity, isPreorder, cost } = req.body;
   if (!userId || !itemId || quantity == null || isPreorder == null) {
     return res.status(400).json({
       success: false,
@@ -101,6 +101,7 @@ exports.requestItem = async (req, res) => {
         item_id: itemId,
         quantity: quantity,
         status: "pending",
+        cost: cost,
         is_preorder: isPreorder,
       },
     ]);
@@ -127,6 +128,40 @@ exports.getTrasactionHistory = async (req, res) => {
       .from("item_requests")
       .select("*")
       .eq("user_id", id);
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getTransactionDetails = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from("item_requests")
+      .select("*")
+      .eq("id", id);
+
+    if (error) throw error;
+
+    res.status(200).json({ success: true, data });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.cancelTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const { data, error } = await supabase
+      .from("item_requests")
+      .update({ status: "cancelled" })
+      .eq("id", id);
 
     if (error) throw error;
 
