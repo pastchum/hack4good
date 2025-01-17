@@ -86,7 +86,7 @@ exports.getItemDetails = async (req, res) => {
 };
 
 exports.requestItem = async (req, res) => {
-  const { userId, itemId, quantity, isPreorder } = req.body;
+  const { userId, itemId, quantity, isPreorder, cost } = req.body;
   if (!userId || !itemId || quantity == null || isPreorder == null) {
     return res.status(400).json({
       success: false,
@@ -101,6 +101,7 @@ exports.requestItem = async (req, res) => {
         item_id: itemId,
         quantity: quantity,
         status: "pending",
+        cost: cost,
         is_preorder: isPreorder,
       },
     ]);

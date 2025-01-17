@@ -57,6 +57,7 @@ CREATE TABLE item_requests (
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     item_id UUID REFERENCES items(id) ON DELETE CASCADE,
     quantity INT NOT NULL,
+    cost INT NOT NULL,
     status request_status DEFAULT 'pending',
     is_preorder BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT now()

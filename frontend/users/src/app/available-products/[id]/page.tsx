@@ -14,6 +14,7 @@ export default function ProductPage({
 }) {
   const [success, setSuccess] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(0);
+  const [totalCost, setTotalCost] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [product, setProduct] = useState<Product>({
     id: 0,
@@ -67,6 +68,7 @@ export default function ProductPage({
         userId: id,
         itemId: product.id,
         quantity: quantity,
+        cost: totalCost,
         isPreorder: !product.is_available,
       });
       console.log(jsonData);
@@ -103,6 +105,7 @@ export default function ProductPage({
       Math.min(Number.parseInt(e.target.value), product.stock)
     );
     setQuantity(value);
+    setTotalCost(product.voucher_cost * value);
   };
 
   return (
@@ -154,18 +157,27 @@ export default function ProductPage({
                 onChange={handleChangeQuantity}
                 value={quantity.toString()}
               />
+              <div className="text-slate-700 mt-5 font-bold p-2 border rounded-xl flex-row flex justify-between">
+                <div>
+                  {" "}
+                  Total Cost{" "}
+                  <p className="text-blue-500 pl-2 text-lg">
+                    {totalCost} points
+                  </p>
+                </div>
+                <button
+                  className={`${
+                    product.is_available ? "bg-blue-500" : "bg-orange-500"
+                  } font-extrabold text-white text-lg p-2 rounded-xl w-1/2 transform transition duration-300 hover:scale-110`}
+                  onClick={() => handlePurchase()}
+                >
+                  {product.is_available ? "Buy" : "Pre-Order"}
+                </button>
+              </div>
               {errorMessage}
               {success && <p className="text-blue-500">Request successful.</p>}
             </div>
             <br />
-            <button
-              className={`${
-                product.is_available ? "bg-blue-500" : "bg-orange-500"
-              } font-extrabold text-white text-lg p-2 rounded-xl w-1/4 transform transition duration-300 hover:scale-110`}
-              onClick={() => handlePurchase()}
-            >
-              {product.is_available ? "Buy" : "Pre-Order"}
-            </button>
           </div>
         </div>
       </div>
